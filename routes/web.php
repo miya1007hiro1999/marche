@@ -6,12 +6,20 @@ use App\Http\Controllers\ComponentTestController;
 use App\Http\Controllers\LifeCycleTestController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('user.welcome');
 });
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return view('user.dashboard');
+})->middleware(['auth:users', 'verified','user'])->name('dashboard');
+
+Route::get('/owner', function () {
+    return view('owner');
+})->middleware(['auth:owners', 'verified','owner'])->name('owner');
+
+Route::get('/admin', function () {
+    return view('admin');
+})->middleware(['auth:admin', 'verified','admin'])->name('admin');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
