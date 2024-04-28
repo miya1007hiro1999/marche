@@ -15,11 +15,11 @@ use App\Http\Controllers\ProfileController;
 
 
 
-Route::get('/', function () {
-    return view('admin.welcome');
-})->middleware('auth:admin');
+// Route::get('/', function () {
+//     return view('admin.welcome');
+// })->middleware('auth:admin');
 
-Route::resource('owners', OwnersController::class);
+Route::resource('owners', OwnersController::class)->except(['show']);
 
 Route::prefix('expired-owners')->middleware('auth:admin')->group(function(){
     Route::get('idex',[OwnersController::class,'expiredOwnerIndex'])->name('expired-owners.index');
