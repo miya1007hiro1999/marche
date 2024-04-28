@@ -1,5 +1,18 @@
 <x-app-layout>
-    
+    <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+        {{-- ここで大きさかえて --}}
+        
+            <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')">
+                {{ __('Dashboard') }}
+            </x-nav-link>
+            <x-nav-link :href="route('admin.owners.index')" :active="request()->routeIs('admin.owner.index')">
+                オーナー管理
+            </x-nav-link>
+            <x-nav-link :href="route('admin.expired-owners.index')" :active="request()->routeIs('admin.expired-owner.index')">
+                期限切れオーナー管理
+            </x-nav-link>
+        
+    </div>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('オーナー一覧') }}
