@@ -21,6 +21,11 @@ Route::get('/', function () {
 
 Route::resource('owners', OwnersController::class);
 
+Route::prefix('expired-owners')->middleware('auth:admin')->group(function(){
+    Route::get('idex',[OwnersController::class,'expiredOwnerIndex'])->name('expired-owners.index');
+    Route::post('destroy/{owner}',[OwnersController::class,'expiredOwnerDestroy'])->name('expired-owners.destroy');
+});
+
 Route::get('/dashboard', function () {
     return view('admin.dashboard');
 })->middleware(['auth:admin', 'verified'])->name('dashboard');
