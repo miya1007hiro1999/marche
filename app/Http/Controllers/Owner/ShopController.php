@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Laravel\Facades\Image;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Gd\Driver;
+use App\Http\Requests\UpLoadImageRequest;
 
 
 class ShopController extends Controller
@@ -58,7 +59,7 @@ class ShopController extends Controller
         // dd(Shop::findOrFail($id));
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpLoadImageRequest $request, string $id)
     {
         // $manager = new ImageManager();
         $imageFile = $request->image; //一時保存
