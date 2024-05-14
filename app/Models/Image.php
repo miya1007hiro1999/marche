@@ -12,7 +12,7 @@ class Image extends Model
 
     protected $fillable = [
         'owner_id',
-        'name',
+        'filename',
     ];
 
     public function owner()
