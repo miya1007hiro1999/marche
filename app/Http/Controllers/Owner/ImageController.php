@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Image;
 use Closure;
+use App\Http\Requests\UpLoadImageRequest;
+
 
 class ImageController extends Controller
 {
@@ -48,15 +50,15 @@ class ImageController extends Controller
      */
     public function create()
     {
-        //
+        return view('owner.images.create');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(UpLoadImageRequest  $request)
     {
-        //
+        dd($request);
     }
 
     /**
