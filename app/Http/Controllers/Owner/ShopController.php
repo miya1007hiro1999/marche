@@ -22,7 +22,7 @@ class ShopController extends Controller
         return [
                 'auth:owners',
                 function (Request $request, Closure $next) {
-                    dd($next($request));
+                    // dd($next($request));
                     $id= $request->route()->parameter('shop');//shopのid取得
                     if(!is_null($id)){
                         $shopsOwnerId = Shop::findOrFail($id)->owner->id;
@@ -66,7 +66,7 @@ class ShopController extends Controller
         // $request->name;
         $request->validate([
             'name' => ['required', 'string', 'max:50'],
-            'information' => ['required', 'string',  'max:1000',],
+            'information' => ['required', 'string',  'max:1000'],
             'is_selling' => ['required', ],
         ]);
 
