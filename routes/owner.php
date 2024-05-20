@@ -26,7 +26,13 @@ Route::prefix('shops')->middleware('auth:owners')->group(function(){
     Route::post('update/{shop}',[ShopController::class,'update'])->name('shops.update');
 });
 
-Route::resource('images', ImageController::class)->except(['show']);
+Route::prefix('images')->middleware('auth:owners')->group(function(){
+    Route::get('index',[ImageController::class,'index'])->name('images.index');
+    Route::get('edit/{image}',[ImageController::class,'edit'])->name('images.edit');
+    Route::post('store',[ImageController::class,'store'])->name('images.store');
+    Route::get('create',[ImageController::class,'create'])->name('images.create');
+    Route::put('update/{image}',[ImageController::class,'update'])->name('images.update');
+});
 
 Route::get('/dashboard', function () {
     return view('owner.dashboard');

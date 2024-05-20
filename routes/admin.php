@@ -22,7 +22,7 @@ use App\Http\Controllers\ProfileController;
 Route::resource('owners', OwnersController::class)->except(['show']);
 
 Route::prefix('expired-owners')->middleware('auth:admin')->group(function(){
-    Route::get('idex',[OwnersController::class,'expiredOwnerIndex'])->name('expired-owners.index');
+    Route::get('index',[OwnersController::class,'expiredOwnerIndex'])->name('expired-owners.index');
     Route::post('destroy/{owner}',[OwnersController::class,'expiredOwnerDestroy'])->name('expired-owners.destroy');
 });
 
