@@ -32,6 +32,7 @@ Route::prefix('images')->middleware('auth:owners')->group(function(){
     Route::post('store',[ImageController::class,'store'])->name('images.store');
     Route::get('create',[ImageController::class,'create'])->name('images.create');
     Route::put('update/{image}',[ImageController::class,'update'])->name('images.update');
+    Route::delete('destroy/{image}',[ImageController::class,'destroy'])->name('images.destroy');
 });
 
 Route::get('/dashboard', function () {
