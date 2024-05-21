@@ -11,6 +11,8 @@ use App\Http\Controllers\Owner\Auth\RegisteredUserController;
 use App\Http\Controllers\Owner\Auth\VerifyEmailController;
 use App\Http\Controllers\Owner\ShopController;
 use App\Http\Controllers\Owner\ImageController;
+use App\Http\Controllers\Owner\ProductController;
+use App\Models\Product;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 
@@ -34,6 +36,22 @@ Route::prefix('images')->middleware('auth:owners')->group(function(){
     Route::put('update/{image}',[ImageController::class,'update'])->name('images.update');
     Route::delete('destroy/{image}',[ImageController::class,'destroy'])->name('images.destroy');
 });
+
+// Route::prefix('products')->middleware('auth:owners')->group(function(){
+//     Route::get('index',[ProductController::class,'index'])->name('products.index');
+//     Route::get('edit/{product}',[ProductController::class,'edit'])->name('products.edit');
+//     Route::post('store',[ProductController::class,'store'])->name('products.store');
+//     Route::get('create',[ProductController::class,'create'])->name('products.create');
+//     Route::put('update/{product}',[ProductController::class,'update'])->name('products.update');
+//     Route::delete('destroy/{product}',[ProductController::class,'destroy'])->name('products.destroy');
+// });
+
+// Route::resource('images' , ImageController::class)
+// ->except(['show']);
+//ここがなんでか反応しなかった。上記のように一つずつ書くとルーティングできた。
+// middlewareがなかったから。
+Route::resource('products' , ProductController::class)
+->middleware('auth:owners')->except(['show']);
 
 Route::get('/dashboard', function () {
     return view('owner.dashboard');
