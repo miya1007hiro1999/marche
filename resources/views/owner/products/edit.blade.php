@@ -18,8 +18,10 @@
                             </ul>
                         </div>
                     @endif
+                    <x-flash-message status="session('status')" />
                     <form method="POST" action="{{ route('owner.products.update',['product' => $product->id]) }}">
                         @csrf
+                        @method('PUT')
                         <div class=" -m-2">
                             <div class="p-2 w-1/2 mx-auto relative">
                                 <label for="name" class="leading-7 text-sm text-gray-600">商品名 ※必須</label>

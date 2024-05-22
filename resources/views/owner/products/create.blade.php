@@ -48,7 +48,8 @@
                                 <input type="number" id="quantity" name="quantity" required
                                     value="{{ old('quantity') }}"
                                     class="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-indigo-500 focus:bg-white focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out">
-                            </div>
+                                    <span >数量は１～９９で指定してください</span>
+                                </div>
                             <div class="p-2 w-1/2 mx-auto relative">
                                 <label for="shop_id" class="leading-7 text-sm text-gray-600">販売する店舗 </label>
                                 <select name="shop_id" id="shop_id"
