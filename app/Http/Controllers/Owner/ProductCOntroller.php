@@ -13,7 +13,7 @@ use App\Models\PrimaryCategory;
 use App\Models\Owner;
 
 
-class ProductCOntroller extends Controller
+class ProductController extends Controller
 {
     public static function middleware(): array
     {
@@ -78,7 +78,7 @@ class ProductCOntroller extends Controller
      */
     public function store(Request $request)
     {
-        //
+        dd($request);
     }
 
     /**
