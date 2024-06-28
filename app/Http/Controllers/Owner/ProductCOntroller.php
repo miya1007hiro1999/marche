@@ -13,6 +13,7 @@ use App\Models\Shop;
 use App\Models\PrimaryCategory;
 use App\Models\Owner;
 use App\Models\Stock;
+use App\Constant\ProductOperation;
 use Throwable;
 use Illuminate\Support\Facades\Log;
 use App\Http\Requests\ProductRequest;
@@ -161,7 +162,7 @@ class ProductController extends Controller
             ->with(['message'=>'在庫数が変更されています。再度変更してください','status'=>'alert']);
         }else{
 
-            
+                
         try{
             DB::transaction(function()use($request,$product){
                 
@@ -177,11 +178,14 @@ class ProductController extends Controller
                     $product->image4 =  $request->image4;
                     $product->is_selling = $request->is_selling;
                     $product->save();
-                
-                if($request->type === '1'){
+            
+
+                    // $add = ProductOperation::ADD;
+                    // $reduce = ProductOperation::REDUCE;
+                if($request->type ===  '1' ){
                     $newQuantity = $request->quantity;
                 }
-                if($request->type === '2'){
+                if($request->type ===  '2' ){
                     $newQuantity = $request->quantity * -1;
                 }
                 Stock::create([

@@ -48,6 +48,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'owner' => Owner::class,
             'admin' => Admin::class,
+            'Constant'=> App\Constant\Common::class,
         ]);
     })
 
