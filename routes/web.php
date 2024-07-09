@@ -7,9 +7,7 @@ use App\Http\Controllers\LifeCycleTestController;
 use App\Http\Controllers\User\ItemController;
 
 
-Route::get('/', function () {
-    return view('user.welcome');
-});
+
 
 Route::middleware('auth:users')->group(function(){
     Route::get('/',[ItemController::class,'index'])->name('items.index');

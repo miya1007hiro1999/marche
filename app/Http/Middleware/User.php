@@ -23,15 +23,15 @@ class User
         $userRole = Auth::user()->role;
 
         if($userRole==1){
-            return $next($request);
+            return redirect()->route('owner');
         }
 
         if($userRole==2){
-            return redirect()->route('');
+            return redirect()->route('admin');
         }
 
         if($userRole==3){
-            return redirect()->route('dashboard');
+            return $next($request);
         }
     }
 }

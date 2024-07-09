@@ -41,8 +41,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 return $request->expectsJson() ? null : route('owner.login');
             } elseif (request()->routeIs('admin.*')) {
                 return $request->expectsJson() ? null : route('admin.login');
+            }else{
+                return $request->expectsJson() ? null : route('user.login');
             }
-            return $request->expectsJson() ? null : route('user.login');
         });
 
         $middleware->alias([

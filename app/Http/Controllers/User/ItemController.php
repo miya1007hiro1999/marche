@@ -23,7 +23,7 @@ class ItemController extends Controller
                 'product_id',
                 DB::raw('sum(quantity) as quantity')
             )
-            ->groupeBy('product_id')
+            ->groupBy('product_id')
             ->having('quantity', '>', 1);
 
         $products = DB::table('products')
