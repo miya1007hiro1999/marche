@@ -3,10 +3,12 @@
 namespace App\Http\Controllers\User;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Stock;
+use Closure;
 
 class ItemController extends Controller
 {
@@ -14,8 +16,20 @@ class ItemController extends Controller
     {
         return [
             'auth:users',
+            function (Request $request, Closure $next) {
+                // dd($next($request));
+                $id= $request->route()->parameter('item');//shopのid取得
+                if(!is_null($id)){
+                    $itemId = Product::availableItems()->where('products.id',$id)->exists();
+                    if($itemId){
+                        abort(404);
+                    } 
+                }
+                return $next($request);
+            },
         ];
 
+        
     }
     public function index()
     {
