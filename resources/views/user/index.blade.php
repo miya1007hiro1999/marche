@@ -4,8 +4,30 @@
             <h2 class="font-semibold text-xl text-gray-800 leading-tight">
                 {{ __('商品一覧') }}
             </h2>
-            <div>
-                {{-- <form action="{{ route('user.items.index') }}" method ="get">
+            <form action="{{ route('user.items.index') }}" method ="get">
+                <div class=“lg:flex lg:justify-around”>
+                    <div class="lg:flex items-center">
+                        <select name="category" class="mb-2 lg:mb-0 lg:mr-2">
+                            <option value="0" @if (\Request::get('category') === '0') selected @endif>全て</option>
+                            @foreach ($categories as $category)
+                                <optgroup label="{{ $category->name }}">
+                                    @foreach ($category->secondary as $secondary)
+                                        <option value="{{ $secondary->id }}">
+                                            {{ $secondary->name }}
+                                        </option>
+                                    @endforeach
+                            @endforeach
+                        </select>
+                        <div class="flex space-x-2 items-center">
+                            <div><input name="keyword" class="border border-gray-500 py-2" placeholder="キーワードを入力"></div>
+                            <div><button
+                                    class="ml-auto text-white bg-indigo-500 border-0 py-2 px-6 focus:outline-none hover:bg-indigo-600 rounded">検索する</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+            {{-- <form action="{{ route('user.items.index') }}" method ="get">
                     <div class ="flex">
                         <div>
                             <span class="text-sm">表示順</span>
@@ -31,17 +53,17 @@
                             <span class="text-sm">表示件数</span>
                             <select id="pagination" name="pagination">
                                 <option value="20"
-                                    @if(\Request::get('pagination') === '20')
+                                    @if (\Request::get('pagination') === '20')
                                     selected
                                     @endif>20件
                                 </option>
                                 <option value="50"
-                                    @if(\Request::get('pagination') === '50')
+                                    @if (\Request::get('pagination') === '50')
                                     selected
                                     @endif>50件
                                 </option>
                                 <option value="100"
-                                    @if(\Request::get('pagination') === '100')
+                                    @if (\Request::get('pagination') === '100')
                                     selected
                                     @endif>100件
                                 </option>
@@ -49,7 +71,7 @@
                         </div>
                     </div>
                 </form> --}}
-            </div>
+
         </div>
     </x-slot>
 
@@ -75,10 +97,10 @@
                         </div>
                     @endforeach
                 </div>
-                {{$products->appends([
-                    'sort' => \Request::get('sort'),
-                    'pagination' =>\Request::get('pagination')
-                ])->links()}}
+                {{ $products->appends([
+                        'sort' => \Request::get('sort'),
+                        'pagination' => \Request::get('pagination'),
+                    ])->links() }}
             </div>
         </div>
     </div>
