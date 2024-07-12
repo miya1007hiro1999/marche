@@ -62,46 +62,56 @@ class CartController extends Controller
     {
         $user = User::findOrFail(Auth::id());
         $products = $user->products;
-
+    
         $lineItems = [];
         foreach ($products as $product) {
-            $quantity= '';
-            $quantity = Stock::where('product_id',$product->id)->sum('quantity');
-
-            if($product->pivot->quantity > $quantity){
+            $quantity = Stock::where('product_id', $product->id)->sum('quantity');
+    
+            if ($product->pivot->quantity > $quantity) {
                 return redirect()->route('user.cart.index');
-            }else{
+            } else {
                 $lineItem = [
-                    'name' => $product->name,
-                    'description' => $product->information,
-                    'amount' => $product->price,
-                    'currency' => 'jpy',
-                    'quantity' => $product->pivot->quantity,
+                    'price_data' => [
+                        'currency' => 'jpy',
+                        'unit_amount' => $product->price , // Convert price to cents
+                        'product_data' => [
+                            'name' => $product->name, // Product name
+                            'description' => $product->information, // Product description
+                        ],
+                    ],
+                    'quantity' => $product->pivot->quantity, // Quantity
                 ];
                 array_push($lineItems, $lineItem);
+    
+                // Decrement stock (handle potential errors)
+                try {
+                    Stock::create([
+                        'product_id' => $product->id,
+                        'type' => '2',
+                        'quantity' => $product->pivot->quantity * -1,
+                    ]);
+                } catch (\Exception $e) {
+                    // Handle stock decrement error (e.g., log the error)
+                }
             }
         }
-        // dd($lineItems);
-        foreach($products as $product){
-            Stock::create([
-                'product_id' => $product->id,
-                'type'=> '2',
-                'quantity'=>$product->pivot->quantity * -1,
-            ]);
-        }
-        dd('test');
+    
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-
+    
         $session = \Stripe\Checkout\Session::create([
-            'lineItems' => [$lineItem],
+            'payment_intent_data' => [
+                'metadata' => [ // Optional: Add custom data
+                    'user_id' => $user->id,
+                ],
+            ],
+            'line_items' => $lineItems,
             'mode' => 'payment',
             'success_url' => route('user.items.index'),
             'cancel_url' => route('user.cart.index'),
         ]);
-
+    
         $publicKey = env('STRIPE_PUBLIC_KEY');
-
-        return view('user.checkout',
-        compact('session','publicKey'));
+    
+        return view('user.checkout', compact('session', 'publicKey'));
     }
 }
