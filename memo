@@ -1,0 +1,26 @@
+1
+エラー概要
+products/edit.blade.php  60行目、６１行目にて
+value="{{\App\Constract\Common::PRODUCT_LIST['add']}}"
+value="{{\App\Constract\Common::PRODUCT_LIST['reduce']}}"
+でclass が見つからないとエラーが出る
+
+エラーの本文の情報を書く
+
+理想状態
+app\Constract\Commonのコードが読み込まれ、
+products/edit.blade.php ページが表示されること。
+<input type="radio" name="type" value="1" checked>追加
+<input type="radio" name="type" value="2">削減
+のvalueの値が関数で置き換えられていること
+
+エラー原因
+Laravel8ではconfig/app.phpのaliaseでクラスの読み込みができ、
+blade.php でも呼び出しができる様子。
+Laravel11ではconfig/app.php内のスリム化がされているため既存の書き方が分からない
+bootstrap\app.phpにミドルウエアエイリアスがあり試したが同じエラーが出る。
+
+
+解決策
+php artisan でconfig/app.phpに追記することを定義する。
+一旦影響がないため元の数字のまま処理する。
