@@ -12,7 +12,8 @@
                             @foreach ($categories as $category)
                                 <optgroup label="{{ $category->name }}">
                                     @foreach ($category->secondary as $secondary)
-                                        <option value="{{ $secondary->id }}">
+                                        <option value="{{ $secondary->id }}"
+                                            @if (\Request::get('category') == $secondary->id) selected @endif>
                                             {{ $secondary->name }}
                                         </option>
                                     @endforeach
@@ -25,52 +26,42 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </form>
-            {{-- <form action="{{ route('user.items.index') }}" method ="get">
-                    <div class ="flex">
+                    <div class="flex">
                         <div>
-                            <span class="text-sm">表示順</span>
-                            <select name="sort" id="sort" class="mr-4">
-                                <option value="{{ Common::SORT_ORDER['recommend'] }}"
-                                    @if (Request::get('sort') === Common::SORT_ORDER['recommend']) selected @endif>おすすめ順
+                            <span class="text-sm">表示順</span><br>
+                            <select id="sort" name="sort" class="mr-4">
+                                <option value="{{ $sortOrder['recommend'] }}"
+                                    @if (\Request::get('sort') === $sortOrder['recommend']) selected @endif>おすすめ順
                                 </option>
-                                <option value="{{ Common::SORT_ORDER['higherPrice'] }}"
-                                    @if (Request::get('sort') === Common::SORT_ORDER['higherPrice']) selected @endif>料金の高い順
+                                <option value="{{ $sortOrder['higherPrice'] }}"
+                                    @if (\Request::get('sort') === $sortOrder['higherPrice']) selected @endif>料金の高い順
                                 </option>
-                                <option value="{{ Common::SORT_ORDER['lowerPrice'] }}"
-                                    @if (Request::get('sort') === Common::SORT_ORDER['lowerPrice']) selected @endif>料金の安い順
+                                <option value="{{ $sortOrder['lowerPrice'] }}"
+                                    @if (\Request::get('sort') === $sortOrder['lowerPrice']) selected @endif>料金の安い順
                                 </option>
-                                <option value="{{ Common::SORT_ORDER['later'] }}"
-                                    @if (Request::get('sort') === Common::SORT_ORDER['later']) selected @endif>新しい順
+                                <option value="{{ $sortOrder['later'] }}"
+                                    @if (\Request::get('sort') === $sortOrder['later']) selected @endif>新しい順
                                 </option>
-                                <option value="{{ Common::SORT_ORDER['older'] }}"
-                                    @if (Request::get('sort') === Common::SORT_ORDER['older']) selected @endif>古い順
+                                <option value="{{ $sortOrder['older'] }}"
+                                    @if (\Request::get('sort') === $sortOrder['older']) selected @endif>古い順
                                 </option>
                             </select>
                         </div>
                         <div>
-                            <span class="text-sm">表示件数</span>
+                            <span class="text-sm">表示件数</span><br>
                             <select id="pagination" name="pagination">
-                                <option value="20"
-                                    @if (\Request::get('pagination') === '20')
-                                    selected
-                                    @endif>20件
+                                <option value="20" @if (\Request::get('pagination') === '20') selected @endif>20件
                                 </option>
-                                <option value="50"
-                                    @if (\Request::get('pagination') === '50')
-                                    selected
-                                    @endif>50件
+                                <option value="50" @if (\Request::get('pagination') === '50') selected @endif>50件
                                 </option>
-                                <option value="100"
-                                    @if (\Request::get('pagination') === '100')
-                                    selected
-                                    @endif>100件
+                                <option value="100" @if (\Request::get('pagination') === '100') selected @endif>100件
                                 </option>
                             </select>
                         </div>
                     </div>
-                </form> --}}
+                </div>
+            </form>
+
 
         </div>
     </x-slot>
@@ -106,11 +97,11 @@
     </div>
     <script>
         const select = document.getElementById('sort')
-        select.addEventLisnet('chenge', function() {
+        select.addEventLisner('chenge', function() {
             this.form.submit()
         })
         const paginate = document.getElementById('pagination')
-        paginate.addEventLisnet('chenge', function() {
+        paginate.addEventLisner('chenge', function() {
             this.form.submit()
         })
     </script>

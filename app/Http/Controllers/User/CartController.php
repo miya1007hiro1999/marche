@@ -18,17 +18,16 @@ class CartController extends Controller
         $products = $user->products;
         $totalPrice = 0;
 
-        foreach ($products as $product) {
-            $totalPrice = $product->price * $product->pivot->quantity;
+        foreach($products as $product){
+            $totalPrice += $product->price * $product->pivot->quantity;
         }
 
+        //dd($products, $totalPrice);
 
-        return view(
-            'user.cart',
-            compact('products', 'totalPrice')
-        );
-
-    }
+        return view('user.cart', 
+            compact('products', 'totalPrice'));
+    }    
+    
     public function add(Request $request)
     {
         $itemInCart = Cart::where('product_id', $request->product_id)
@@ -95,24 +94,20 @@ class CartController extends Controller
                 }
             }
         }
-    
         \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
-    
+
         $session = \Stripe\Checkout\Session::create([
-            'payment_intent_data' => [
-                'metadata' => [ // Optional: Add custom data
-                    'user_id' => $user->id,
-                ],
-            ],
-            'line_items' => $lineItems,
+            'payment_method_types' => ['card'],
+            'line_items' => [$lineItems],
             'mode' => 'payment',
             'success_url' => route('user.cart.success'),
             'cancel_url' => route('user.cart.cancel'),
         ]);
-    
+
         $publicKey = env('STRIPE_PUBLIC_KEY');
-    
-        return view('user.checkout', compact('session', 'publicKey'));
+
+        return view('user.checkout', 
+            compact('session', 'publicKey'));
     }
 
     public function success()

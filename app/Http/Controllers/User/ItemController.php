@@ -10,6 +10,8 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Stock;
 use Closure;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\TestMail;
 
 class ItemController extends Controller
 {
@@ -19,12 +21,12 @@ class ItemController extends Controller
             'auth:users',
             function (Request $request, Closure $next) {
                 // dd($next($request));
-                $id= $request->route()->parameter('item');//shopのid取得
-                if(!is_null($id)){
-                    $itemId = Product::availableItems()->where('products.id',$id)->exists();
-                    if($itemId){
+                $id = $request->route()->parameter('item'); 
+                if(!is_null($id)){ 
+                $itemId = Product::availableItems()->where('products.id', $id)->exists();
+                    if(!$itemId){ 
                         abort(404);
-                    } 
+                    }
                 }
                 return $next($request);
             },
@@ -34,6 +36,9 @@ class ItemController extends Controller
     }
     public function index(Request $request)
     {
+        $email = 'test@example.com';
+        Mail::to($email)->send(new TestMail());
+
         $categories = PrimaryCategory::with('secondary')
         ->get();
 
@@ -43,9 +48,10 @@ class ItemController extends Controller
         ->sortOrder($request->sort)
         ->paginate($request->pagination ?? '20');
 
+        $sortOrder = Product::SORT_ORDER;
         // dd($stocks);
         // $products = Product::all();
-        return view('user.index', compact('products','categories'));
+        return view('user.index', compact('products','categories','sortOrder'));
     }
 
     public function show($id)

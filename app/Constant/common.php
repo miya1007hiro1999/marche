@@ -12,13 +12,13 @@ class Common
     const ORDER_LATER = '3';
     const ORDER_OLDER = '4';
 
-    // const SORT_ORDER = [
-    //     'recommend' => self::ORDER_RECOMMEND,
-    //     'higherPrice' => self::ORDER_HIGHER,
-    //     'lowerPrice' => self::ORDER_LOWER,
-    //     'later' => self::ORDER_LATER,
-    //     'older' => self::ORDER_OLDER
-    // ];
+    const SORT_ORDER = [
+        'recommend' => self::ORDER_RECOMMEND,
+        'higherPrice' => self::ORDER_HIGHER,
+        'lowerPrice' => self::ORDER_LOWER,
+        'later' => self::ORDER_LATER,
+        'older' => self::ORDER_OLDER
+    ];
 
     const SORT_ORDER = [
         'recommend' => '0',

@@ -113,21 +113,35 @@ class Product extends Model
             );
     }
 
+    const ORDER_RECOMMEND = '0';
+    const ORDER_HIGHER = '1';
+    const ORDER_LOWER = '2';
+    const ORDER_LATER = '3';
+    const ORDER_OLDER = '4';
+
+    const SORT_ORDER = [
+        'recommend' => self::ORDER_RECOMMEND,
+        'higherPrice' => self::ORDER_HIGHER,
+        'lowerPrice' => self::ORDER_LOWER,
+        'later' => self::ORDER_LATER,
+        'older' => self::ORDER_OLDER
+    ];
+
     public function scopeSortOrder($query, $sortOrder)
     {
-        if ($sortOrder === null || $sortOrder === Common::SORT_ORDER['recommend']) {
+        if ($sortOrder === null || $sortOrder === self::SORT_ORDER['recommend']) {
             return $query->orderBy('sort_order', 'asc');
         }
-        if ($sortOrder === Common::SORT_ORDER['higherPrice']) {
+        if ($sortOrder === self::SORT_ORDER['higherPrice']) {
             return $query->orderBy('price', 'desc');
         }
-        if ($sortOrder === Common::SORT_ORDER['lowerPrice']) {
+        if ($sortOrder === self::SORT_ORDER['lowerPrice']) {
             return $query->orderBy('price', 'asc');
         }
-        if ($sortOrder === Common::SORT_ORDER['later']) {
+        if ($sortOrder === self::SORT_ORDER['later']) {
             return $query->orderBy('products.created_at', 'desc');
         }
-        if ($sortOrder === Common::SORT_ORDER['older']) {
+        if ($sortOrder === self::SORT_ORDER['older']) {
             return $query->orderBy('products.created_at', 'asc');
         }
     }
