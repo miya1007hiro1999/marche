@@ -12,6 +12,7 @@ use App\Models\Stock;
 use Closure;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\TestMail;
+use App\Jobs\SendThanksMail;
 
 class ItemController extends Controller
 {
@@ -36,8 +37,12 @@ class ItemController extends Controller
     }
     public function index(Request $request)
     {
-        $email = 'test@example.com';
-        Mail::to($email)->send(new TestMail());
+        //同期的処理
+        // $email = 'test@example.com';
+        // Mail::to($email)->send(new TestMail());
+
+        //非同期処理
+        SendThanksMail::dispatch();
 
         $categories = PrimaryCategory::with('secondary')
         ->get();
