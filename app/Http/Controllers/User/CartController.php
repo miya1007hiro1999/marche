@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Stock;
 use App\Services\CartService;
 use App\Jobs\SendThanksMail;
+use App\Jobs\SendOrderedMail;
 
 class CartController extends Controller
 {
@@ -20,16 +21,18 @@ class CartController extends Controller
         $products = $user->products;
         $totalPrice = 0;
 
-        foreach($products as $product){
+        foreach ($products as $product) {
             $totalPrice += $product->price * $product->pivot->quantity;
         }
 
         //dd($products, $totalPrice);
 
-        return view('user.cart', 
-            compact('products', 'totalPrice'));
-    }    
-    
+        return view(
+            'user.cart',
+            compact('products', 'totalPrice')
+        );
+    }
+
     public function add(Request $request)
     {
         $itemInCart = Cart::where('product_id', $request->product_id)
@@ -62,29 +65,20 @@ class CartController extends Controller
     public function checkout()
     {
 
-        ////
-        $items = Cart::where('user_id', Auth::id())->get();
-        $products = CartService::getItemsInCart($items);
-        $user = User::findOrFail(Auth::id());
-
-
-        SendThanksMail::dispatch($products,$user);
-        dd('ユーザーメール送信テスト');
-        ////
         $user = User::findOrFail(Auth::id());
         $products = $user->products;
-    
+
         $lineItems = [];
         foreach ($products as $product) {
             $quantity = Stock::where('product_id', $product->id)->sum('quantity');
-    
+
             if ($product->pivot->quantity > $quantity) {
                 return redirect()->route('user.cart.index');
             } else {
                 $lineItem = [
                     'price_data' => [
                         'currency' => 'jpy',
-                        'unit_amount' => $product->price , // Convert price to cents
+                        'unit_amount' => $product->price, // Convert price to cents
                         'product_data' => [
                             'name' => $product->name, // Product name
                             'description' => $product->information, // Product description
@@ -93,7 +87,7 @@ class CartController extends Controller
                     'quantity' => $product->pivot->quantity, // Quantity
                 ];
                 array_push($lineItems, $lineItem);
-    
+
                 // Decrement stock (handle potential errors)
                 try {
                     Stock::create([
@@ -118,12 +112,26 @@ class CartController extends Controller
 
         $publicKey = env('STRIPE_PUBLIC_KEY');
 
-        return view('user.checkout', 
-            compact('session', 'publicKey'));
+        return view(
+            'user.checkout',
+            compact('session', 'publicKey')
+        );
     }
 
     public function success()
     {
+        //// mailtrap
+        $items = Cart::where('user_id', Auth::id())->get();
+        $products = CartService::getItemsInCart($items);
+        $user = User::findOrFail(Auth::id());
+
+
+        SendThanksMail::dispatch($products, $user);
+
+        foreach ($products as $product) {
+            SendOrderedMail::dispatch($product, $user);
+        }
+        ////
         Cart::where('user_id', Auth::id())->delete();
 
         return redirect()->route('user.items.index');
@@ -131,13 +139,13 @@ class CartController extends Controller
 
     public function cancel()
     {
-        $user = User::findOrFail(Auth::id());   
+        $user = User::findOrFail(Auth::id());
 
-        foreach($user->products as $product){
+        foreach ($user->products as $product) {
             Stock::create([
                 'product_id' => $product->id,
                 'type' => '1',
-                'quantity' => $product->pivot->quantity ,
+                'quantity' => $product->pivot->quantity,
             ]);
         }
 
