@@ -26,7 +26,6 @@ class CartService
             array_push($products, $result); //配列に追加
 
         }
-        dd($products);
         return $products;
     }
 }
