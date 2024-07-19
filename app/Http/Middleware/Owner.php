@@ -32,5 +32,7 @@ class Owner
         if($userRole==3){
             return redirect()->route('dashboard');
         }
+
+        return redirect()->route('.owner');
     }
 }

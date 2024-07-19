@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Models\Owner; //エロくアント
+use App\Models\Owner; //エロクアント
 use Illuminate\Support\Facades\DB; //クエリビルダ
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;

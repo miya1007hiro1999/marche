@@ -33,5 +33,7 @@ class User
         if($userRole==3){
             return $next($request);
         }
+
+        return redirect()->route('user.index');
     }
 }
